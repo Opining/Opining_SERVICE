@@ -15,5 +15,7 @@
         <!-- Bind the getCurrentSession() method to the thread. -->  
         <property name="current_session_context_class">thread</property>
 		
+		<mapping class="br.com.opining.Test" />
+		
 	</session-factory>
 </hibernate-configuration>
