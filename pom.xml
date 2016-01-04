@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>Opining_SERVICE</groupId>
 	<artifactId>Opining_SERVICE</artifactId>
 	<version>0.0.1</version>
 	<packaging>war</packaging>
-	
+
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
@@ -36,8 +36,16 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<dependencies>
+
+		<!-- JTA -->
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>jta</artifactId>
+			<version>1.1</version>
+		</dependency>
+
 		<!-- Servlet-api -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -57,14 +65,14 @@
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>5.0.0.CR4</version>
+			<artifactId>hibernate-core</artifactId>
+			<version>5.0.6.Final</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>5.0.0.CR4</version>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>5.0.6.Final</version>
 		</dependency>
 
 		<!-- RESTEasy -->
@@ -136,7 +144,7 @@
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 			<version>1.2</version>
-		</dependency>	
+		</dependency>
 	</dependencies>
-	
+
 </project>

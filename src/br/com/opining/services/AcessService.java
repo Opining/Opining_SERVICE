@@ -1,12 +1,13 @@
 package br.com.opining.services;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import br.com.opining.library.model.AcessKey;
 import br.com.opining.library.model.User;
 
 @Path("acess")
@@ -21,6 +22,7 @@ public class AcessService {
 	 * 
 	 * @author [Author Name]
 	 */
+	@PermitAll
 	@POST
 	@Path("/login")
 	@Consumes("application/json")
@@ -39,26 +41,12 @@ public class AcessService {
 	 * 
 	 * @author [Author Name]
 	 */
+	@RolesAllowed("user")
 	@POST
 	@Path("/logout")
 	@Consumes("application/json")
 	@Produces("application/json")
 	public Response logout(User user){
-		//TODO
-		return null;
-	}
-	
-	private static String generateKey(){
-		//TODO
-		return null;
-	}
-	
-	private AcessKey checkIfHasKey(Integer idUser){
-		//TODO
-		return null;
-	}
-	
-	private AcessKey createKey(User user){
 		//TODO
 		return null;
 	}

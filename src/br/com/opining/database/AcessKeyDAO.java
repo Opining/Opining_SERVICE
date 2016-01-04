@@ -7,6 +7,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import br.com.opining.library.model.AcessKey;
+import br.com.opining.library.model.User;
 import br.com.opining.util.HibernateUtil;
 
 public class AcessKeyDAO extends GenericDAO<AcessKey>{
@@ -54,5 +55,21 @@ public class AcessKeyDAO extends GenericDAO<AcessKey>{
 
 		return acessKey;
 	}
-
+	
+	public AcessKey getByUser(User user){
+		 Session session = HibernateUtil.getSessionFactory().openSession();
+		 session.beginTransaction();
+		
+		 Query query = session.createQuery("from AcessKey where user = :user");
+		 query.setParameter("user", user);
+		 query.setMaxResults(1);
+		 
+		 AcessKey acessKey = (AcessKey) query.uniqueResult();
+		
+		 session.getTransaction().commit();
+		 session.close();
+		
+		 return acessKey;
+	}
+	
 }
