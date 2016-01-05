@@ -40,7 +40,7 @@ public class AcessService {
 	@Produces("application/json")
 	public Response login(User user){
 		
-		logger.info(user.getLogin() + " is logging now");
+		logger.info(user.getLogin() + " is logging in now");
 		
 		ResponseBuilder builder;
 		User bdUser = checkIfUserExists(user);
@@ -76,7 +76,7 @@ public class AcessService {
 	 * @param user
 	 * @return a response that can contains a Message
 	 * 
-	 * @author [Author Name]
+	 * @author José Renan
 	 */
 	@RolesAllowed("user")
 	@POST
@@ -84,15 +84,27 @@ public class AcessService {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public Response logout(User user){
-		//TODO
-		return null;
+		
+		logger.info(user.getLogin() + " is logging out now");
+		
+		ResponseBuilder builder;
+		
+		Authorizator auth = new Authorizator();
+		auth.deleteKey(user);
+		
+		builder = Response.status(Response.Status.OK);
+		logger.info(user.getLogin() + " is succefully logged out");
+		
+		setLogoutInformations(user.getIdUser());
+		
+		return builder.build();
 	}
 	
 	private void setLoginInformations(String login){
 		//TODO
 	}
 	
-	private void setLogoutInformations(String login){
+	private void setLogoutInformations(Integer idUser){
 		//TODO
 	}
 	
