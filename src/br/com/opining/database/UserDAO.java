@@ -54,5 +54,21 @@ public class UserDAO extends GenericDAO<User>{
 		}
 
 		return user;
-	}	
+	}
+	
+	public User getByLogin(String login){
+		 Session session = HibernateUtil.getSessionFactory().openSession();
+		 session.beginTransaction();
+		
+		 Query query = session.createQuery("from User where login = :login");
+		 query.setParameter("login", login);
+		 query.setMaxResults(1);
+		 
+		 User user = (User) query.uniqueResult();
+		
+		 session.getTransaction().commit();
+		 session.close();
+		
+		 return user;
+	}
 }

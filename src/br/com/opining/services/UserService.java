@@ -1,6 +1,5 @@
 package br.com.opining.services;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
@@ -15,19 +14,29 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.HibernateException;
-import org.hibernate.exception.GenericJDBCException;
 
 import br.com.opining.database.UserDAO;
+import br.com.opining.database.UserInformationDAO;
 import br.com.opining.library.model.User;
+import br.com.opining.library.model.UserInformations;
 import br.com.opining.library.model.error.OpiningError;
-import br.com.opining.util.ErrorFactory;
+import br.com.opining.util.DataValidator;
 
 @Path("user")
 public class UserService {
 	
 	private static final Logger logger = LogManager.getLogger(UserService.class.getName());
 	
+	/**
+	 * This method create a new User its UserInformations and insert it in the database.
+	 * If the received user contains a existent login name this method return a 
+	 * response that contains a OpiningError, otherwise returns the created user with all informations.
+	 * 
+	 * @param user
+	 * @return a response that can contains a User or a Message
+	 * 
+	 * @author José Renan
+	 */
 	@PermitAll
 	@POST
 	@Path("/create")
@@ -40,13 +49,23 @@ public class UserService {
 		UserDAO userDAO = new UserDAO();
 		ResponseBuilder builder;
 		
-		try {
+		OpiningError error = DataValidator.validateInsertion(user);
+		
+		if (error == null) {
+			UserInformations userInformations = new UserInformations();
+			UserInformationDAO userInformationDAO = new UserInformationDAO();
+			
 			userDAO.insert(user);
+			
+			userInformations.setUser(user);
+			userInformationDAO.insert(userInformations);
+			
 			builder = Response.status(Response.Status.OK).entity(user);
 			logger.info("New user registered.");
-		} catch (GenericJDBCException ex) {
-			OpiningError error = ErrorFactory.getErrorFromIndex(ErrorFactory.DUPLICATE_LOGIN);
+		
+		} else {
 			builder = Response.status(Response.Status.CONFLICT).entity(error);
+			logger.warn("This login name is in use: " + user.getLogin());
 		}
 		
 		return builder.build();
@@ -76,6 +95,8 @@ public class UserService {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public List<User> listUsers(){
-		return null;
+		
+		UserDAO userDAO = new UserDAO();
+		return userDAO.getAll();
 	}
 }

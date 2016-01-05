@@ -10,7 +10,7 @@ public class ErrorFactory {
 	private ErrorFactory() {
 	}
 
-	private static int index = 0;
+	private static int index = 1;
 
 	/*
 	 * Error status relatives to users.
@@ -25,9 +25,9 @@ public class ErrorFactory {
 	private final static Map<Integer, String> generateErrorMapping() {
 		HashMap<Integer, String> hashMap = new HashMap<Integer, String>();
 
-		hashMap.put(DUPLICATE_LOGIN, "Duplicate entry for username");
-		hashMap.put(USER_NOT_FOUND, "User not registered");
-		hashMap.put(INCORRECT_PASSWORD, "Incorrect password");
+		hashMap.put(DUPLICATE_LOGIN, "Este nome de login já está em uso");
+		hashMap.put(USER_NOT_FOUND, "Usuário inexistente");
+		hashMap.put(INCORRECT_PASSWORD, "Senha incorreta");
 		
 		return hashMap;
 	}
