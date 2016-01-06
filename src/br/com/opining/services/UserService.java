@@ -150,6 +150,8 @@ public class UserService {
 	 * @param user
 	 * @return List<User>
 	 * 
+	 * @see {@link br.com.opining.services.UserService#listUsers() listUsers()}
+	 * 
 	 * @author José Renan
 	 */
 	@RolesAllowed("user")
@@ -158,7 +160,26 @@ public class UserService {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public List<User> listValidUsers(){
-		
+		UserDAO userDAO = new UserDAO();
+		return userDAO.getValidUsers();
+	}
+	
+	/**
+	 * This method list all users
+	 * 
+	 * @param user
+	 * @return List<User>
+	 * 
+	 * @see {@link br.com.opining.services.UserService#listValidUsers() listValidUsers()}
+	 * 
+	 * @author José Renan
+	 */
+	@RolesAllowed("user")
+	@GET
+	@Path("/list/all")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public List<User> listUsers(){
 		UserDAO userDAO = new UserDAO();
 		return userDAO.getAll();
 	}
