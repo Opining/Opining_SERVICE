@@ -77,7 +77,21 @@ public class UserService {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public Response invalidateUser(User user){
-		return null;
+		logger.info(user.getLogin() + " is requesting be an invalidation");
+		logger.info("Starting to invalidate an user");
+		
+		UserDAO userDAO = new UserDAO();
+		ResponseBuilder builder;
+		
+		user.setLogin(null);
+		
+		logger.info("Updating the database");
+		userDAO.update(user);
+		logger.info("Database has been updated");
+		
+		builder = Response.status(Response.Status.OK).entity(user);
+		
+		return builder.build();
 	}
 	
 	@RolesAllowed("user")
@@ -86,7 +100,26 @@ public class UserService {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public Response updateUser(User user){
-		return null;
+		logger.info(user.getLogin() + "is requesting an update");
+		logger.info("Starting to update an user");
+		
+		UserDAO userDAO = new UserDAO();
+		ResponseBuilder builder;
+		
+		OpiningError error = DataValidator.validateUpdate(user);
+		
+		if(error == null){
+			logger.info("Updating the user");
+			userDAO.update(user);
+			logger.info("The user has been updated");
+			
+			builder = Response.status(Response.Status.OK).entity(user);
+			
+		}else{
+			builder = Response.status(Response.Status.CONFLICT).entity(error);
+			logger.warn("Could not update the user");
+		}
+		return builder.build();
 	}
 	
 	@RolesAllowed("user")

@@ -47,7 +47,7 @@ public class AcessService {
 		
 		if(bdUser == null){
 			OpiningError error = ErrorFactory.getErrorFromIndex(ErrorFactory.USER_NOT_FOUND);
-			builder = Response.status(Status.OK).entity(error);
+			builder = Response.status(Status.INTERNAL_SERVER_ERROR).entity(error);
 			
 			logger.warn(user.getLogin() + " isn't succefully logged in with error code: " + error.getCode());
 			
@@ -61,7 +61,7 @@ public class AcessService {
 			
 		} else {
 			OpiningError error = ErrorFactory.getErrorFromIndex(ErrorFactory.INCORRECT_PASSWORD);
-			builder = Response.status(Status.OK).entity(error);
+			builder = Response.status(Status.EXPECTATION_FAILED).entity(error);
 			
 			logger.warn(user.getLogin() + " isn't succefully logged in with error code: " + error.getCode());
 		}
