@@ -130,6 +130,6 @@ public class UserService {
 	public List<User> listUsers(){
 		
 		UserDAO userDAO = new UserDAO();
-		return userDAO.getValidUsers();
+		return userDAO.getAll();
 	}
 }
