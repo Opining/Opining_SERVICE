@@ -17,7 +17,17 @@ public class DataValidator {
 		return null;
 	}
 	
-	public static OpiningError checkIfLoginAndPasswordIsCorrect(User user){
+	public static OpiningError validateUpdate(User user){
+		
+		OpiningError error = validateInsertion(user);
+		
+		if(error != null)
+			return error;
+		
+		return null;
+	}
+	
+	public static OpiningError checkUserAttributes(User user){
 		
 		UserDAO userDAO = new UserDAO();
 		User bdUser = userDAO.getByLogin(user.getLogin());
