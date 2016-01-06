@@ -20,6 +20,7 @@ import br.com.opining.database.UserInformationDAO;
 import br.com.opining.library.model.User;
 import br.com.opining.library.model.UserInformations;
 import br.com.opining.library.model.error.OpiningError;
+import br.com.opining.rest.security.Authorizator;
 import br.com.opining.util.DataValidator;
 
 @Path("user")
@@ -28,12 +29,13 @@ public class UserService {
 	private static final Logger logger = LogManager.getLogger(UserService.class.getName());
 	
 	/**
-	 * This method create a new User its UserInformations and insert it in the database.
+	 * This method create a new User (After check if that can be inserted) 
+	 * its UserInformations and insert it in the database.
 	 * If the received user contains a existent login name this method return a 
 	 * response that contains a OpiningError, otherwise returns the created user with all informations.
 	 * 
 	 * @param user
-	 * @return a response that can contains a User or a Message
+	 * @return a response that can contains a User or a OpiningError
 	 * 
 	 * @author José Renan
 	 */
@@ -71,6 +73,15 @@ public class UserService {
 		return builder.build();
 	}
 	
+	/**
+	 * This method invalidates a user changing login to null 
+	 * and deletes his AcessKey from BD.
+	 * 
+	 * @param user
+	 * @return Response
+	 * 
+	 * @author Diego Takei and José Renan
+	 */
 	@RolesAllowed("user")
 	@POST
 	@Path("/invalidate")
@@ -85,15 +96,26 @@ public class UserService {
 		
 		user.setLogin(null);
 		
+		Authorizator auth = new Authorizator();
+		auth.deleteKey(user);
+		
 		logger.info("Updating the database");
 		userDAO.update(user);
 		logger.info("Database has been updated");
 		
-		builder = Response.status(Response.Status.OK).entity(user);
+		builder = Response.status(Response.Status.OK);
 		
 		return builder.build();
 	}
 	
+	/**
+	 * This method updates a user after check if that can be updated
+	 * 
+	 * @param user
+	 * @return a Response that can contains a User or a OpiningError
+	 * 
+	 * @author Diego Takei
+	 */
 	@RolesAllowed("user")
 	@POST
 	@Path("/update")
@@ -122,12 +144,20 @@ public class UserService {
 		return builder.build();
 	}
 	
+	/**
+	 * This method list all valid users
+	 * 
+	 * @param user
+	 * @return List<User>
+	 * 
+	 * @author José Renan
+	 */
 	@RolesAllowed("user")
 	@GET
-	@Path("/list/all")
+	@Path("/list/valid")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public List<User> listUsers(){
+	public List<User> listValidUsers(){
 		
 		UserDAO userDAO = new UserDAO();
 		return userDAO.getValidUsers();

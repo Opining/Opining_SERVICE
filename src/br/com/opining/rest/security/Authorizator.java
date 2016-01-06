@@ -51,9 +51,16 @@ public class Authorizator {
 		
 		AcessKeyDAO acessKeyDAO = new AcessKeyDAO();
 		AcessKey acessKey = acessKeyDAO.getByUser(user);
-		acessKeyDAO.delete(acessKey);
 		
-		logger.info(user.getLogin() + "'s key is deleted");
+		if (acessKey != null) {
+			
+			logger.info(user.getLogin() + " has a key");
+			acessKeyDAO.delete(acessKey);
+			logger.info(user.getLogin() + "'s key is deleted");
+			
+		} else {
+			logger.info(user.getLogin() + " didn't have a key");
+		}
 	}
 
 	protected boolean isAuthorized(String key) {

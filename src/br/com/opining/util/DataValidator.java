@@ -6,7 +6,18 @@ import br.com.opining.library.model.error.OpiningError;
 
 public class DataValidator {
 	
+	/**
+	 * This method check if that user can be inserted on BD.
+	 * 
+	 * @param user
+	 * @return OpiningError
+	 */
 	public static OpiningError validateInsertion(User user){
+		
+		OpiningError error = checkUserAttributes(user);
+		
+		if (error != null)
+			return error;
 		
 		UserDAO userDAO = new UserDAO();
 		User bdUser = userDAO.getByLogin(user.getLogin());
@@ -17,6 +28,12 @@ public class DataValidator {
 		return null;
 	}
 	
+	/**
+	 * This method check if that user can be updated on BD.
+	 * 
+	 * @param user
+	 * @return OpiningError
+	 */
 	public static OpiningError validateUpdate(User user){
 		
 		OpiningError error = validateInsertion(user);
@@ -24,19 +41,40 @@ public class DataValidator {
 		if(error != null)
 			return error;
 		
+		UserDAO userDAO = new UserDAO();
+		User bdUser = userDAO.getValidUser(user.getIdUser());
+		
+		if (bdUser == null)
+			return ErrorFactory.getErrorFromIndex(ErrorFactory.USER_IS_INVALID);
+		
 		return null;
 	}
 	
-	public static OpiningError checkUserAttributes(User user){
+	/**
+	 * This method checks if the user parameters are according to predefined standards
+	 * 
+	 * @param user
+	 * @return OpiningError
+	 */
+	private static OpiningError checkUserAttributes(User user){
 		
-		UserDAO userDAO = new UserDAO();
-		User bdUser = userDAO.getByLogin(user.getLogin());
+		if (user.getLogin() == null || user.getLogin().length() < User.LOGIN_MIN_LENGHT)
+			return ErrorFactory.getErrorFromIndex(ErrorFactory.LOGIN_IS_TOO_SHORT);
 		
-		if(bdUser == null)
-			return ErrorFactory.getErrorFromIndex(ErrorFactory.USER_NOT_FOUND);
+		if (user.getPassword() == null || user.getPassword().length() < User.PASSWORD_MIN_LENGHT)
+			return ErrorFactory.getErrorFromIndex(ErrorFactory.PASSWORD_IS_TOO_SHORT);
 		
-		if (!bdUser.getPassword().equals(user.getPassword()))
-			return ErrorFactory.getErrorFromIndex(ErrorFactory.INCORRECT_PASSWORD);
+		if (user.getName() == null || user.getName().length() < User.NAME_MIN_LENGHT)
+			return ErrorFactory.getErrorFromIndex(ErrorFactory.PASSWORD_IS_TOO_SHORT);
+		
+		if (user.getPassword().length() > User.PASSWORD_MAX_LENGHT)
+			return ErrorFactory.getErrorFromIndex(ErrorFactory.PASSWORD_IS_TOO_LONG);
+		
+		if (user.getName().length() > User.NAME_MAX_LENGHT)
+			return ErrorFactory.getErrorFromIndex(ErrorFactory.NAME_IS_TOO_LONG);
+		
+		if (user.getLogin().length() > User.LOGIN_MAX_LENGHT)
+			return ErrorFactory.getErrorFromIndex(ErrorFactory.LOGIN_IS_TOO_LONG);
 		
 		return null;
 	}

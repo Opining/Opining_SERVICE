@@ -17,7 +17,14 @@ public class ErrorFactory {
 	 */
 	public static final int DUPLICATE_LOGIN = index++;
 	public static final int USER_NOT_FOUND = index++;
+	public static final int USER_IS_INVALID = index++;
 	public static final int INCORRECT_PASSWORD = index++;
+	public static final int LOGIN_IS_TOO_LONG = index++;
+	public static final int PASSWORD_IS_TOO_LONG = index++;
+	public static final int NAME_IS_TOO_LONG = index++;
+	public static final int NAME_IS_TOO_SHORT = index++;
+	public static final int PASSWORD_IS_TOO_SHORT = index++;
+	public static final int LOGIN_IS_TOO_SHORT = index++;
 	
 	private static final Map<Integer, String> mapErrors = generateErrorMapping();
 
@@ -27,7 +34,14 @@ public class ErrorFactory {
 
 		hashMap.put(DUPLICATE_LOGIN, "Este nome de login já está em uso");
 		hashMap.put(USER_NOT_FOUND, "Usuário inexistente");
+		hashMap.put(USER_IS_INVALID, "Usuário não existe mais");
 		hashMap.put(INCORRECT_PASSWORD, "Senha incorreta");
+		hashMap.put(LOGIN_IS_TOO_LONG, "Este nome de login possui mais caracteres que o permitido");
+		hashMap.put(PASSWORD_IS_TOO_LONG, "Esta senha possui mais caracteres que o permitido");
+		hashMap.put(NAME_IS_TOO_LONG, "Este nome possui mais caracteres que o permitido");
+		hashMap.put(NAME_IS_TOO_SHORT, "Este nome possui menos caracteres que o permitido");
+		hashMap.put(PASSWORD_IS_TOO_SHORT, "Esta senha possui menos caracteres que o permitido");
+		hashMap.put(LOGIN_IS_TOO_SHORT, "Este nome de login possui menos caracteres que o permitido");
 		
 		return hashMap;
 	}
