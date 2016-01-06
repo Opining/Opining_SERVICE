@@ -97,8 +97,17 @@ public class UserDAO extends GenericDAO<User>{
 	
 	public User getValidUser(Integer id){
 		
-		//TODO
-		User user = null;
+		 Session session = HibernateUtil.getSessionFactory().openSession();
+		 session.beginTransaction();
+		
+		 Query query = session.createQuery("from User where id = :id and login is not null");
+		 query.setParameter("id", id);
+		 query.setMaxResults(1);
+		 
+		 User user = (User) query.uniqueResult();
+		
+		 session.getTransaction().commit();
+		 session.close();
 		
 		return user;
 	}
