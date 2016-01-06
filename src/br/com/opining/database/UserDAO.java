@@ -71,4 +71,35 @@ public class UserDAO extends GenericDAO<User>{
 		
 		 return user;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<User> getValidUsers(){
+		
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		List<User> validUsers = null;
+		
+		try{
+			session.beginTransaction();
+			Query query = session.createQuery("from User where login is not null");
+			
+			validUsers = (List<User>) query.list();
+			session.getTransaction().commit();
+			
+		} catch (HibernateException hexp) {
+			session.getTransaction().rollback();			
+		} finally{
+			session.clear();
+			session.close();
+		}
+		
+		return validUsers;
+	}
+	
+	public User getValidUser(Integer id){
+		
+		//TODO
+		User user = null;
+		
+		return user;
+	}
 }
