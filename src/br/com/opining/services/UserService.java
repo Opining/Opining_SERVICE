@@ -67,7 +67,7 @@ public class UserService {
 		
 		} else {
 			builder = Response.status(Response.Status.CONFLICT).entity(error);
-			logger.warn("This login name is in use: " + user.getLogin());
+			logger.warn(error.getMessage() + ": " + user.getLogin());
 		}
 		
 		return builder.build();

@@ -65,7 +65,7 @@ public class DataValidator {
 			return ErrorFactory.getErrorFromIndex(ErrorFactory.PASSWORD_IS_TOO_SHORT);
 		
 		if (user.getName() == null || user.getName().length() < User.NAME_MIN_LENGHT)
-			return ErrorFactory.getErrorFromIndex(ErrorFactory.PASSWORD_IS_TOO_SHORT);
+			return ErrorFactory.getErrorFromIndex(ErrorFactory.NAME_IS_TOO_SHORT);
 		
 		if (user.getPassword().length() > User.PASSWORD_MAX_LENGHT)
 			return ErrorFactory.getErrorFromIndex(ErrorFactory.PASSWORD_IS_TOO_LONG);

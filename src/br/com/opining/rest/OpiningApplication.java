@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
+import org.jboss.resteasy.plugins.interceptors.CorsFilter;
+
 import br.com.opining.services.AcessService;
 import br.com.opining.services.PolarizedDebateService;
 import br.com.opining.services.UserService;
@@ -15,6 +17,11 @@ public class OpiningApplication extends Application{
 	private Set<Class<?>> empty = new HashSet<Class<?>>();
 
 	public OpiningApplication() {
+		
+		CorsFilter filter = new CorsFilter();
+		filter.getAllowedOrigins().add("*");
+		
+		this.singletons.add(filter);
 		this.singletons.add(new UserService());
 		this.singletons.add(new AcessService());
 		this.singletons.add(new PolarizedDebateService());
