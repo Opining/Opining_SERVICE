@@ -25,6 +25,11 @@ public class DataValidator {
 		if(bdUser != null)
 			return ErrorFactory.getErrorFromIndex(ErrorFactory.DUPLICATE_LOGIN);
 		
+		bdUser = userDAO.getByToken(user.getToken());
+		
+		if(bdUser != null)
+			return ErrorFactory.getErrorFromIndex(ErrorFactory.DUPLICATE_TOKEN);
+		
 		return null;
 	}
 	

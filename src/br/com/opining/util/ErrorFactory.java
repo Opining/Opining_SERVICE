@@ -25,6 +25,7 @@ public class ErrorFactory {
 	public static final int NAME_IS_TOO_SHORT = index++;
 	public static final int PASSWORD_IS_TOO_SHORT = index++;
 	public static final int LOGIN_IS_TOO_SHORT = index++;
+	public static final int DUPLICATE_TOKEN = index++;
 	
 	private static final Map<Integer, String> mapErrors = generateErrorMapping();
 
@@ -42,6 +43,7 @@ public class ErrorFactory {
 		hashMap.put(NAME_IS_TOO_SHORT, "Este nome possui menos caracteres que o permitido");
 		hashMap.put(PASSWORD_IS_TOO_SHORT, "Esta senha possui menos caracteres que o permitido");
 		hashMap.put(LOGIN_IS_TOO_SHORT, "Este nome de login possui menos caracteres que o permitido");
+		hashMap.put(DUPLICATE_TOKEN, "Este token já existe.");
 		
 		return hashMap;
 	}
