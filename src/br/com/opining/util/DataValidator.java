@@ -22,7 +22,7 @@ public class DataValidator {
 		UserDAO userDAO = new UserDAO();
 		User bdUser = userDAO.getByLogin(user.getLogin());
 		
-		if(bdUser != null)
+		if(bdUser != null && bdUser.getIdUser() != user.getIdUser())
 			return ErrorFactory.getErrorFromIndex(ErrorFactory.DUPLICATE_LOGIN);
 		
 		bdUser = userDAO.getByToken(user.getToken());
