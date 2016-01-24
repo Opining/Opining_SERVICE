@@ -1,5 +1,7 @@
 package br.com.opining.services;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -57,6 +59,33 @@ public class PolarizedDebateService {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public Response leaveDebate(PolarizedDebater debater){
-		return null;
+		
+		PolarizedDebaterDAO debaterDAO = new PolarizedDebaterDAO();
+		ResponseBuilder builder;
+		
+		debater.setIsValid(false);
+		debaterDAO.update(debater);
+		
+		
+		builder = Response.status(Response.Status.OK);
+		
+		return builder.build();
+	}
+	
+	@POST
+	@Path("/listDebates")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public Response listDebates(){
+	
+		PolarizedRoomDAO polarizedRoomDAO = new PolarizedRoomDAO();
+		
+		List<PolarizedRoom> polarizedRoom = polarizedRoomDAO.getAll();
+		
+		ResponseBuilder builder;
+		
+		builder = Response.status(Response.Status.OK).entity(polarizedRoom);
+		
+		return builder.build();
 	}
 }
