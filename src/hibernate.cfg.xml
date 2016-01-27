@@ -18,7 +18,6 @@
 		<mapping class="br.com.opining.library.model.User" />
 		<mapping class="br.com.opining.library.model.UserInformations" />
 		<mapping class="br.com.opining.library.model.AcessKey" />
-		<mapping class="br.com.opining.library.model.room.DebateRoom" />
 		<mapping class="br.com.opining.library.model.room.polarized.PolarizedRoom" />
 		
 	</session-factory>
