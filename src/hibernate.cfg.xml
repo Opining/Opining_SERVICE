@@ -19,6 +19,7 @@
 		<mapping class="br.com.opining.library.model.UserInformations" />
 		<mapping class="br.com.opining.library.model.AcessKey" />
 		<mapping class="br.com.opining.library.model.room.polarized.PolarizedRoom" />
+		<mapping class="br.com.opining.library.model.room.polarized.participant.PolarizedDebater" />
 		
 	</session-factory>
 </hibernate-configuration>

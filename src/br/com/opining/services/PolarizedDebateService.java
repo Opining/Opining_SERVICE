@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 
 import br.com.opining.database.PolarizedDebaterDAO;
 import br.com.opining.database.PolarizedRoomDAO;
+import br.com.opining.database.UserDAO;
 import br.com.opining.library.model.User;
 import br.com.opining.library.model.room.polarized.PolarizedRoom;
 import br.com.opining.library.model.room.polarized.participant.PolarizedDebater;
@@ -39,15 +40,27 @@ public class PolarizedDebateService {
 	@Path("/enterDebate")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response enterDebate(User user, @QueryParam("idRoom") Integer idRoom){
+	public Response enterDebate(String password, @QueryParam("idRoom") Integer idRoom, @QueryParam("idUser") Integer idUser){
 		
 		PolarizedDebater debater = new PolarizedDebater();
-		PolarizedDebaterDAO debaterDAO = new PolarizedDebaterDAO();
+		User user = new User();
+		PolarizedRoom room = new PolarizedRoom();
 		
-		debater = debaterDAO.getById(idRoom);
+		PolarizedDebaterDAO debaterDAO = new PolarizedDebaterDAO();
+		PolarizedRoomDAO polarizedRoomDAO = new PolarizedRoomDAO();
+		UserDAO userDAO = new UserDAO();
+		
+		user = userDAO.getById(idUser);
+		room = polarizedRoomDAO.getById(idRoom);
+		
+		debater.setRoom(room);
 		debater.setUser(user);
 		
+		debaterDAO.insert(debater);
+		
 		ResponseBuilder builder;
+		
+		debater.setSide(null);
 		
 		builder = Response.status(Response.Status.OK).entity(debater);
 		
