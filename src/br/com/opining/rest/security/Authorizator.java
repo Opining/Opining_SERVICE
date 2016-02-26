@@ -7,11 +7,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import br.com.opining.database.AcessKeyDAO;
-import br.com.opining.database.UserDAO;
 import br.com.opining.library.model.AcessKey;
 import br.com.opining.library.model.User;
 import br.com.opining.library.util.EncryptUtil;
-import br.com.opining.library.util.StringUtil;
 
 public class Authorizator {
 	
@@ -24,7 +22,7 @@ public class Authorizator {
 		AcessKeyDAO acessKeyDAO = new AcessKeyDAO();
 		AcessKey acessKey;
     	
-		acessKey = acessKeyDAO.getByUser(user);
+		acessKey = acessKeyDAO.getByLoginUser(user.getLogin());
     	
     	if(acessKey == null){
     		
@@ -40,6 +38,10 @@ public class Authorizator {
 		    acessKeyDAO.insert(acessKey);
 		    
 		    logger.info(user.getLogin() + " has a key now");
+		    
+    	} else {
+    		acessKey.setKey(generateKey());
+    		acessKeyDAO.update(acessKey);
     	}
     	
     	return acessKey;
@@ -50,7 +52,7 @@ public class Authorizator {
 		logger.info("Deleting the " + user.getLogin() + "'s key");
 		
 		AcessKeyDAO acessKeyDAO = new AcessKeyDAO();
-		AcessKey acessKey = acessKeyDAO.getByUser(user);
+		AcessKey acessKey = acessKeyDAO.getByLoginUser(user.getLogin());
 		
 		if (acessKey != null) {
 			
@@ -65,36 +67,15 @@ public class Authorizator {
 
 	protected boolean isAuthorized(String key) {
 		
-		key = EncryptUtil.decode(key);
-		StringTokenizer tokenizer = new StringTokenizer(key, ":");
-
-		String keyId = tokenizer.nextToken();
-		String userId = tokenizer.nextToken();
-		key = tokenizer.nextToken();
-		
-		if (!StringUtil.isNum(keyId) || !StringUtil.isNum(userId))
-			return false;
-		
-		Integer idKey = Integer.parseInt(keyId);
-		Integer idUser = Integer.parseInt(userId);
-		
-		User user = new UserDAO().getById(idUser);
-		
-		if(user == null)
-			return false;
-		
-		AcessKey acessKey = new AcessKeyDAO().getByUser(user);
+		String decodedKey = EncryptUtil.decode(key);
+		StringTokenizer tokenizer = new StringTokenizer(decodedKey, ":");
+		String login = tokenizer.nextToken();
+		AcessKey acessKey = new AcessKeyDAO().getByLoginUser(login);
 
 		if (acessKey == null)
 			return false;
 		
-		AcessKey acessKeyReceived = new AcessKey();
-		
-		acessKeyReceived.setIdKey(idKey);
-		acessKeyReceived.setUser(user);
-		acessKeyReceived.setKey(key);
-		
-		if (acessKey.equals(acessKeyReceived))
+		if (key.equals(acessKey.buildKey()))
 			return true;
 		
 		return false;

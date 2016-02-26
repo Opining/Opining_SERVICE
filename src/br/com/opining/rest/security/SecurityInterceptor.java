@@ -33,33 +33,33 @@ public class SecurityInterceptor implements ContainerRequestFilter {
 		ResourceMethodInvoker methodInvoker = (ResourceMethodInvoker) requestContext.getProperty("org.jboss.resteasy.core.ResourceMethodInvoker");
 		Method method = methodInvoker.getMethod();
 		
-		if (!method.isAnnotationPresent(PermitAll.class)) {
+		if (method.isAnnotationPresent(PermitAll.class)) {
+			return;
+		}
 			
-			if(method.isAnnotationPresent(DenyAll.class)){
+		if(method.isAnnotationPresent(DenyAll.class)){
+			requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
+			return;
+		}
+			
+		if(method.isAnnotationPresent(RolesAllowed.class)){
+				
+			final MultivaluedMap<String, String> headers = requestContext.getHeaders();
+			final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
+	
+			if (authorization == null || authorization.isEmpty()) {
 				requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
 				return;
 			}
-			
-			if(method.isAnnotationPresent(RolesAllowed.class)){
 				
-				final MultivaluedMap<String, String> headers = requestContext.getHeaders();
-				final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
-	
-				if (authorization == null || authorization.isEmpty()) {
-					requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
-					return;
-				}
+			final String key = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
+			Authorizator authorizator = new Authorizator();
 				
-				final String key = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
-				
-				Authorizator authorizator = new Authorizator();
-				
-				if(!authorizator.isAuthorized(key)){
-					requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
-					logger.info("Someone is unauthorized");
+			if(!authorizator.isAuthorized(key)){
+				requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
+				logger.info("Someone is unauthorized");
 					
-					return;
-				}
+				return;
 			}
 		}
 	}

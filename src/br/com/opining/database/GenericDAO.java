@@ -31,7 +31,7 @@ public abstract class GenericDAO<T> {
 
 		try {
 			session.beginTransaction();
-			session.merge(entity);
+			session.update(entity);
 			session.getTransaction().commit();
 		} catch (HibernateException hexp) {
 			session.getTransaction().rollback();

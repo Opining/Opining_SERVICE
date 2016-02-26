@@ -6,6 +6,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
@@ -15,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import br.com.opining.database.UserDAO;
 import br.com.opining.library.model.User;
+import br.com.opining.library.model.UserCredentials;
 import br.com.opining.library.model.error.OpiningError;
 import br.com.opining.rest.security.Authorizator;
 import br.com.opining.util.ErrorFactory;
@@ -38,32 +40,38 @@ public class AcessService {
 	@Path("/login")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response login(User user){
+	public Response login(@QueryParam("login") String login, String password){
 		
-		logger.info(user.getLogin() + " is logging in now");
+		logger.info(login + " is logging in now");
 		
 		ResponseBuilder builder;
-		User bdUser = checkIfUserExists(user);
+		User bdUser = checkIfUserExists(login);
 		
 		if(bdUser == null){
 			OpiningError error = ErrorFactory.getErrorFromIndex(ErrorFactory.USER_NOT_FOUND);
 			builder = Response.status(Status.INTERNAL_SERVER_ERROR).entity(error);
 			
-			logger.warn(user.getLogin() + " isn't succefully logged in with error code: " + error.getCode());
+			logger.warn(login + " isn't succefully logged in with error code: " + error.getCode());
 			
-		} else if (user.getPassword().equals(bdUser.getPassword())){
+		} else if (password.equals(bdUser.getPassword())){
+			
 			Authorizator auth = new Authorizator();
-			builder = Response.status(Status.OK).entity(auth.insertKey(bdUser));
+			UserCredentials userCredentials = new UserCredentials();
 			
-			setLoginInformations(user.getLogin());
+			userCredentials.setKey(auth.insertKey(bdUser).getKey());
+			userCredentials.setUser(bdUser);
 			
-			logger.info(user.getLogin() + " is succefully logged in");
+			builder = Response.status(Status.OK).entity(userCredentials);
+			
+			setLoginInformations(login);
+			
+			logger.info(login + " is succefully logged in");
 			
 		} else {
 			OpiningError error = ErrorFactory.getErrorFromIndex(ErrorFactory.INCORRECT_PASSWORD);
 			builder = Response.status(Status.EXPECTATION_FAILED).entity(error);
 			
-			logger.warn(user.getLogin() + " isn't succefully logged in with error code: " + error.getCode());
+			logger.warn(login + " isn't succefully logged in with error code: " + error.getCode());
 		}
 		
 		return builder.build();
@@ -95,7 +103,7 @@ public class AcessService {
 		builder = Response.status(Response.Status.OK);
 		logger.info(user.getLogin() + " is succefully logged out");
 		
-		setLogoutInformations(user.getIdUser());
+		setLogoutInformations(user.getLogin());
 		
 		return builder.build();
 	}
@@ -104,13 +112,13 @@ public class AcessService {
 		//TODO
 	}
 	
-	private void setLogoutInformations(Integer idUser){
+	private void setLogoutInformations(String login){
 		//TODO
 	}
 	
-	private static User checkIfUserExists(User user){
+	private static User checkIfUserExists(String login){
 		UserDAO userDAO = new UserDAO();
-		User bdUser = userDAO.getByLogin(user.getLogin());
+		User bdUser = userDAO.getByLogin(login);
 		
 		return bdUser;
 		

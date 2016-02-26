@@ -9,6 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
@@ -17,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 import br.com.opining.database.UserDAO;
 import br.com.opining.database.UserInformationDAO;
+import br.com.opining.library.model.NewUser;
 import br.com.opining.library.model.User;
 import br.com.opining.library.model.UserInformations;
 import br.com.opining.library.model.error.OpiningError;
@@ -34,7 +36,7 @@ public class UserService {
 	 * If the received user contains a existent login name this method return a 
 	 * response that contains a OpiningError, otherwise returns the created user with all informations.
 	 * 
-	 * @param user
+	 * @param newUser
 	 * @return a response that can contains a User or a OpiningError
 	 * 
 	 * @author José Renan
@@ -44,18 +46,20 @@ public class UserService {
 	@Path("/create")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response createUser(User user){
-		logger.info(user.getLogin() + " is requesting be an Opining user");
-		logger.info("Starting a new user creation");
+	public Response createUser(NewUser newUser){
+		
+		logger.info(newUser.getNewLogin() + " is requesting be an Opining user");
+		logger.info("Starting a new user creation " + newUser.getNewPassword());
 		
 		UserDAO userDAO = new UserDAO();
 		ResponseBuilder builder;
 		
-		OpiningError error = DataValidator.validateInsertion(user);
+		OpiningError error = DataValidator.validateInsertion(newUser);
 		
 		if (error == null) {
 			UserInformations userInformations = new UserInformations();
 			UserInformationDAO userInformationDAO = new UserInformationDAO();
+			User user = newUser.toUser();
 			
 			userDAO.insert(user);
 			
@@ -67,7 +71,7 @@ public class UserService {
 		
 		} else {
 			builder = Response.status(Response.Status.CONFLICT).entity(error);
-			logger.warn(error.getMessage() + ": " + user.getLogin());
+			logger.warn(error.getMessage() + ": " + newUser.getNewLogin());
 		}
 		
 		return builder.build();
@@ -94,14 +98,15 @@ public class UserService {
 		UserDAO userDAO = new UserDAO();
 		ResponseBuilder builder;
 		
+		user = userDAO.getByLogin(user.getLogin());
 		user.setLogin(null);
 		
 		Authorizator auth = new Authorizator();
 		auth.deleteKey(user);
 		
-		logger.info("Updating the database");
+		logger.info("Updating the database to invalidate user");
 		userDAO.update(user);
-		logger.info("Database has been updated");
+		logger.info("User invalidated");
 		
 		builder = Response.status(Response.Status.OK);
 		
@@ -111,7 +116,7 @@ public class UserService {
 	/**
 	 * This method updates a user after check if that can be updated
 	 * 
-	 * @param user
+	 * @param newUser
 	 * @return a Response that can contains a User or a OpiningError
 	 * 
 	 * @author Diego Takei
@@ -121,17 +126,22 @@ public class UserService {
 	@Path("/update")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response updateUser(User user){
-		logger.info(user.getLogin() + "is requesting an update");
+	public Response updateUser(@QueryParam(value = "login") String login, NewUser newUser){
+		
+		logger.info(login + "is requesting an update");
 		logger.info("Starting to update an user");
 		
 		UserDAO userDAO = new UserDAO();
+		User user = userDAO.getByLogin(login);
 		ResponseBuilder builder;
 		
-		OpiningError error = DataValidator.validateUpdate(user);
+		OpiningError error = DataValidator.validateUpdate(user, newUser);
 		
 		if(error == null){
 			logger.info("Updating the user");
+			
+			user = newUser.toUser(user.getIdUser());
+			
 			userDAO.update(user);
 			logger.info("The user has been updated");
 			
@@ -181,6 +191,8 @@ public class UserService {
 	@Produces("application/json")
 	public List<User> listUsers(){
 		UserDAO userDAO = new UserDAO();
-		return userDAO.getAll();
+		List<User> list = userDAO.getAll();
+		
+		return list;
 	}
 }

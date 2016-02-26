@@ -6,7 +6,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import br.com.opining.library.model.room.polarized.participant.PolarizedDebater;
+import br.com.opining.library.model.room.participant.PolarizedDebater;
 import br.com.opining.util.HibernateUtil;
 
 public class PolarizedDebaterDAO extends GenericDAO<PolarizedDebater> {
