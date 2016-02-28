@@ -8,7 +8,7 @@ import javax.ws.rs.core.Application;
 import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 
 import br.com.opining.services.AcessService;
-import br.com.opining.services.PolarizedDebateService;
+import br.com.opining.services.PolarizedRoomService;
 import br.com.opining.services.UserService;
 
 public class OpiningApplication extends Application{
@@ -24,7 +24,7 @@ public class OpiningApplication extends Application{
 		this.singletons.add(filter);
 		this.singletons.add(new UserService());
 		this.singletons.add(new AcessService());
-		this.singletons.add(new PolarizedDebateService());
+		this.singletons.add(new PolarizedRoomService());
 	}
 
 	public Set<Class<?>> setSingletons() {

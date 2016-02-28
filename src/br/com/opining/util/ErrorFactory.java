@@ -25,6 +25,11 @@ public class ErrorFactory {
 	public static final int NAME_IS_TOO_SHORT = index++;
 	public static final int PASSWORD_IS_TOO_SHORT = index++;
 	public static final int LOGIN_IS_TOO_SHORT = index++;
+	public static final int ROOM_NOT_FOUND = index++;
+	public static final int SUBJECT_IS_TOO_SHORT = index++;
+	public static final int SUBJECT_IS_TOO_LONG = index++;
+	public static final int ARGUMENT_TIME_TOO_SHORT = index++;
+	public static final int ARGUMENT_TIME_TOO_LONG = index++;
 	
 	private static final Map<Integer, String> mapErrors = generateErrorMapping();
 
@@ -42,6 +47,11 @@ public class ErrorFactory {
 		hashMap.put(NAME_IS_TOO_SHORT, "Este nome possui menos caracteres que o permitido");
 		hashMap.put(PASSWORD_IS_TOO_SHORT, "Esta senha possui menos caracteres que o permitido");
 		hashMap.put(LOGIN_IS_TOO_SHORT, "Este nome de login possui menos caracteres que o permitido");
+		hashMap.put(ROOM_NOT_FOUND, "Esta sala não existe");
+		hashMap.put(SUBJECT_IS_TOO_SHORT, "Tema da sala possui menos caracteres que o permitido");
+		hashMap.put(SUBJECT_IS_TOO_LONG, "Tema da sala possui menos caracteres que o permitido");
+		hashMap.put(ARGUMENT_TIME_TOO_SHORT, "O tempo de argumentação deve ser maior");
+		hashMap.put(ARGUMENT_TIME_TOO_LONG, "O tempo de argumentação deve ser menor");
 		
 		return hashMap;
 	}

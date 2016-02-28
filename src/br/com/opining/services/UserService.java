@@ -23,7 +23,7 @@ import br.com.opining.library.model.User;
 import br.com.opining.library.model.UserInformations;
 import br.com.opining.library.model.error.OpiningError;
 import br.com.opining.rest.security.Authorizator;
-import br.com.opining.util.DataValidator;
+import br.com.opining.util.validation.UserValidator;
 
 @Path("user")
 public class UserService {
@@ -54,9 +54,10 @@ public class UserService {
 		UserDAO userDAO = new UserDAO();
 		ResponseBuilder builder;
 		
-		OpiningError error = DataValidator.validateInsertion(newUser);
+		OpiningError error = new UserValidator().validateInsertion(newUser);
 		
 		if (error == null) {
+			
 			UserInformations userInformations = new UserInformations();
 			UserInformationDAO userInformationDAO = new UserInformationDAO();
 			User user = newUser.toUser();
@@ -70,6 +71,7 @@ public class UserService {
 			logger.info("New user registered.");
 		
 		} else {
+			
 			builder = Response.status(Response.Status.CONFLICT).entity(error);
 			logger.warn(error.getMessage() + ": " + newUser.getNewLogin());
 		}
@@ -92,6 +94,7 @@ public class UserService {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public Response invalidateUser(User user){
+		
 		logger.info(user.getLogin() + " is requesting be an invalidation");
 		logger.info("Starting to invalidate an user");
 		
@@ -131,14 +134,16 @@ public class UserService {
 		logger.info(login + "is requesting an update");
 		logger.info("Starting to update an user");
 		
-		UserDAO userDAO = new UserDAO();
-		User user = userDAO.getByLogin(login);
+		OpiningError error = new UserValidator().validateUpdate(login, newUser);
+		
 		ResponseBuilder builder;
 		
-		OpiningError error = DataValidator.validateUpdate(user, newUser);
-		
 		if(error == null){
+			
 			logger.info("Updating the user");
+			
+			UserDAO userDAO = new UserDAO();
+			User user = userDAO.getByLogin(login);
 			
 			user = newUser.toUser(user.getIdUser());
 			
