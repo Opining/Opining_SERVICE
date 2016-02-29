@@ -22,9 +22,9 @@ import br.com.opining.rest.security.Authorizator;
 import br.com.opining.util.ErrorFactory;
 
 @Path("access")
-public class AcessService {
+public class AccessService {
 	
-	private static final Logger logger = LogManager.getLogger(AcessService.class.getName());
+	private static final Logger logger = LogManager.getLogger(AccessService.class.getName());
 	
 	/**
 	 * This method check if that user exists in the database and authorize
