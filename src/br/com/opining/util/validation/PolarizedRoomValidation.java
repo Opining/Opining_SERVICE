@@ -51,11 +51,14 @@ public class PolarizedRoomValidation implements DataValidator<NewPolarizedRoom, 
 	
 	private static OpiningError checkDebateAttributes(NewPolarizedRoom newPolarizedRoom){
 		
-		if (newPolarizedRoom.getNewPassword() == null || newPolarizedRoom.getNewPassword().length() < PolarizedRoom.PASSWORD_MIN_LENGHT)
-			return ErrorFactory.getErrorFromIndex(ErrorFactory.PASSWORD_IS_TOO_SHORT);
-		
-		if (newPolarizedRoom.getNewPassword() == null || newPolarizedRoom.getNewPassword().length() > PolarizedRoom.PASSWORD_MAX_LENGHT)
-			return ErrorFactory.getErrorFromIndex(ErrorFactory.PASSWORD_IS_TOO_LONG);
+		if (newPolarizedRoom.getIsPrivate()) {
+			
+			if (newPolarizedRoom.getNewPassword() == null || newPolarizedRoom.getNewPassword().length() < PolarizedRoom.PASSWORD_MIN_LENGHT)
+				return ErrorFactory.getErrorFromIndex(ErrorFactory.PASSWORD_IS_TOO_SHORT);
+			
+			if (newPolarizedRoom.getNewPassword() == null || newPolarizedRoom.getNewPassword().length() > PolarizedRoom.PASSWORD_MAX_LENGHT)
+				return ErrorFactory.getErrorFromIndex(ErrorFactory.PASSWORD_IS_TOO_LONG);
+		}
 		
 		if (newPolarizedRoom.getNewSubject() == null || newPolarizedRoom.getNewSubject().length() < PolarizedRoom.SUBJECT_MIN_LENGHT)
 			return ErrorFactory.getErrorFromIndex(ErrorFactory.SUBJECT_IS_TOO_SHORT);
