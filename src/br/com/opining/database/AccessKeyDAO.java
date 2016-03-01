@@ -6,21 +6,21 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import br.com.opining.library.model.AcessKey;
+import br.com.opining.library.model.AccessKey;
 import br.com.opining.util.HibernateUtil;
 
-public class AcessKeyDAO extends GenericDAO<AcessKey>{
+public class AccessKeyDAO extends GenericDAO<AccessKey>{
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<AcessKey> getAll() {
+	public List<AccessKey> getAll() {
 		Session session = HibernateUtil.getSessionFactory().openSession();
-		List<AcessKey> acessKeys = null;
+		List<AccessKey> accessKeys = null;
 
 		try {
 			session.beginTransaction();
 			Query query = session.getNamedQuery("AcessKey.getAll");
-			acessKeys = (List<AcessKey>) query.list();
+			accessKeys = (List<AccessKey>) query.list();
 			session.getTransaction().commit();
 
 		} catch (HibernateException hexp) {
@@ -31,18 +31,18 @@ public class AcessKeyDAO extends GenericDAO<AcessKey>{
 			session.close();
 		}
 
-		return acessKeys;
+		return accessKeys;
 	}
 
 	@Override
-	public AcessKey getById(Integer pk) {
+	public AccessKey getById(Integer pk) {
 
 		Session session = HibernateUtil.getSessionFactory().openSession();
-		AcessKey acessKey = null;
+		AccessKey accessKey = null;
 
 		try {
 			session.beginTransaction();
-			acessKey = (AcessKey) session.get(AcessKey.class, pk);
+			accessKey = (AccessKey) session.get(AccessKey.class, pk);
 			session.getTransaction().commit();
 
 		} catch (HibernateException hexp) {
@@ -52,10 +52,10 @@ public class AcessKeyDAO extends GenericDAO<AcessKey>{
 			session.close();
 		}
 
-		return acessKey;
+		return accessKey;
 	}
 	
-	public AcessKey getByLoginUser(String login){
+	public AccessKey getByLoginUser(String login){
 		 Session session = HibernateUtil.getSessionFactory().openSession();
 		 session.beginTransaction();
 		
@@ -63,12 +63,12 @@ public class AcessKeyDAO extends GenericDAO<AcessKey>{
 		 query.setParameter("login", login);
 		 query.setMaxResults(1);
 		 
-		 AcessKey acessKey = (AcessKey) query.uniqueResult();
+		 AccessKey accessKey = (AccessKey) query.uniqueResult();
 		
 		 session.getTransaction().commit();
 		 session.close();
 		
-		 return acessKey;
+		 return accessKey;
 	}
 	
 }
