@@ -6,5 +6,5 @@ public interface DataValidator<T, ID> {
 	
 	public OpiningError validateInsertion(T newEntity);
 	public OpiningError validateUpdate(ID oldID, T newEntity);
-	
+		
 }

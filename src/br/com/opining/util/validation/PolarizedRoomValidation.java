@@ -49,6 +49,38 @@ public class PolarizedRoomValidation implements DataValidator<NewPolarizedRoom, 
 		return null;
 	}
 	
+	public OpiningError validateEntrance(String password, int idRoom, String login){
+		
+		PolarizedRoom room = new PolarizedRoom();
+		User user = new User();
+		
+		PolarizedRoomDAO polarizedRoomDAO = new PolarizedRoomDAO();
+		UserDAO userDAO = new UserDAO();
+		
+		user = userDAO.getByLogin(login);
+		room = polarizedRoomDAO.getById(idRoom);
+		
+		if(user == null)
+			return ErrorFactory.getErrorFromIndex(ErrorFactory.USER_NOT_FOUND);
+		if(room == null){
+			return ErrorFactory.getErrorFromIndex(ErrorFactory.ROOM_NOT_FOUND);
+		}else if(room.getIsPrivate()){
+			if(room.getPassword().equals(password)){
+				return null;
+			}
+			else
+				return ErrorFactory.getErrorFromIndex(ErrorFactory.INCORRECT_PASSWORD);
+		}
+			
+		return null;
+		
+	}
+	
+	
+	
+	
+	
+	
 	private static OpiningError checkDebateAttributes(NewPolarizedRoom newPolarizedRoom){
 		
 		if (newPolarizedRoom.getIsPrivate()) {
@@ -74,5 +106,6 @@ public class PolarizedRoomValidation implements DataValidator<NewPolarizedRoom, 
 		
 		return null;
 	}
+
 	
 }

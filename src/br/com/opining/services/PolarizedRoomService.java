@@ -72,25 +72,34 @@ public class PolarizedRoomService {
 								@FormParam("idRoom") Integer idRoom, 
 								@FormParam("login") String login){
 		
-		PolarizedDebater debater = new PolarizedDebater();
-		PolarizedRoom room = new PolarizedRoom();
-		User user = new User();
+		logger.info("Starting new user entrance");
 		
-		PolarizedDebaterDAO debaterDAO = new PolarizedDebaterDAO();
-		PolarizedRoomDAO polarizedRoomDAO = new PolarizedRoomDAO();
-		UserDAO userDAO = new UserDAO();
-		
-		user = userDAO.getByLogin(login);
-		room = polarizedRoomDAO.getById(idRoom);
-		
-		debater.setRoom(room);
-		debater.setUser(user);
-		
-		debaterDAO.insert(debater);
-		debater.setSide(null);
-		
+		OpiningError error = new PolarizedRoomValidation().validateEntrance(password, idRoom, login);
 		ResponseBuilder builder;
-		builder = Response.status(Response.Status.OK).entity(debater);
+		
+		if(error==null){
+			PolarizedDebater debater = new PolarizedDebater();
+			PolarizedRoom room = new PolarizedRoom();
+			User user = new User();
+			
+			PolarizedDebaterDAO debaterDAO = new PolarizedDebaterDAO();
+			PolarizedRoomDAO polarizedRoomDAO = new PolarizedRoomDAO();
+			UserDAO userDAO = new UserDAO();
+			
+			user = userDAO.getByLogin(login);
+			room = polarizedRoomDAO.getById(idRoom);
+			
+			debater.setRoom(room);
+			debater.setUser(user);
+			
+			debaterDAO.insert(debater);
+			debater.setSide(null);
+			
+			builder = Response.status(Response.Status.OK).entity(debater);
+		}else{
+			builder = Response.status(Response.Status.CONFLICT).entity(error);
+			logger.warn("User entrance is failed with error code: " + error.getCode());
+		}
 		
 		return builder.build();
 	}
