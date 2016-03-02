@@ -19,7 +19,7 @@ public class AccessKeyDAO extends GenericDAO<AccessKey>{
 
 		try {
 			session.beginTransaction();
-			Query query = session.getNamedQuery("AcessKey.getAll");
+			Query query = session.getNamedQuery("AccessKey.getAll");
 			accessKeys = (List<AccessKey>) query.list();
 			session.getTransaction().commit();
 

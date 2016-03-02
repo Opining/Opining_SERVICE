@@ -25,6 +25,8 @@ public class ErrorFactory {
 	public static final int NAME_IS_TOO_SHORT = index++;
 	public static final int PASSWORD_IS_TOO_SHORT = index++;
 	public static final int LOGIN_IS_TOO_SHORT = index++;
+	public static final int LOGIN_FORMAT_NOT_ACCEPTED = index++;
+	public static final int NAME_FORMAT_NOT_ACCEPTED = index++;
 	public static final int ROOM_NOT_FOUND = index++;
 	public static final int SUBJECT_IS_TOO_SHORT = index++;
 	public static final int SUBJECT_IS_TOO_LONG = index++;
@@ -52,6 +54,8 @@ public class ErrorFactory {
 		hashMap.put(SUBJECT_IS_TOO_LONG, "Tema da sala possui menos caracteres que o permitido");
 		hashMap.put(ARGUMENT_TIME_TOO_SHORT, "O tempo de argumentação deve ser maior");
 		hashMap.put(ARGUMENT_TIME_TOO_LONG, "O tempo de argumentação deve ser menor");
+		hashMap.put(LOGIN_FORMAT_NOT_ACCEPTED, "O login só deve possuir caracteres alfa-numéricos");
+		hashMap.put(NAME_FORMAT_NOT_ACCEPTED, "O nome só deve possuir letras A-Z, Ç maiúsculas, minúsculas e espaços");
 		
 		return hashMap;
 	}
