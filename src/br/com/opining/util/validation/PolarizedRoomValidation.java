@@ -62,24 +62,16 @@ public class PolarizedRoomValidation implements DataValidator<NewPolarizedRoom, 
 		
 		if(user == null)
 			return ErrorFactory.getErrorFromIndex(ErrorFactory.USER_NOT_FOUND);
-		if(room == null){
+		
+		if(room == null)
 			return ErrorFactory.getErrorFromIndex(ErrorFactory.ROOM_NOT_FOUND);
-		}else if(room.getIsPrivate()){
-			if(room.getPassword().equals(password)){
-				return null;
-			}
-			else
-				return ErrorFactory.getErrorFromIndex(ErrorFactory.INCORRECT_PASSWORD);
-		}
+		
+		if(room.getIsPrivate() && !room.getPassword().equals(password))
+			return ErrorFactory.getErrorFromIndex(ErrorFactory.INCORRECT_PASSWORD);
 			
 		return null;
 		
 	}
-	
-	
-	
-	
-	
 	
 	private static OpiningError checkDebateAttributes(NewPolarizedRoom newPolarizedRoom){
 		

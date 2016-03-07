@@ -59,7 +59,7 @@ public class AccessKeyDAO extends GenericDAO<AccessKey>{
 		 Session session = HibernateUtil.getSessionFactory().openSession();
 		 session.beginTransaction();
 		
-		 Query query = session.createQuery("from AcessKey where user.login = :login");
+		 Query query = session.createQuery("from AccessKey where user.login = :login");
 		 query.setParameter("login", login);
 		 query.setMaxResults(1);
 		 

@@ -83,6 +83,12 @@ public class UserValidator implements DataValidator<NewUser, String> {
 		if (newUser.getNewLogin().length() > User.LOGIN_MAX_LENGHT)
 			return ErrorFactory.getErrorFromIndex(ErrorFactory.LOGIN_IS_TOO_LONG);
 		
+		if (!newUser.getNewLogin().matches("^[a-z0-9]+$"))
+			return ErrorFactory.getErrorFromIndex(ErrorFactory.LOGIN_FORMAT_NOT_ACCEPTED);
+		
+		//if (!newUser.getNewName().matches("^[a-záàâãéèêíïóôõöúçñ ]+$"))
+			//return ErrorFactory.getErrorFromIndex(ErrorFactory.NAME_FORMAT_NOT_ACCEPTED);
+		
 		return null;
 	}
 }

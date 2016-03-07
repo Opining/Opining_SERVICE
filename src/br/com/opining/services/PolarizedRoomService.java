@@ -3,12 +3,15 @@ package br.com.opining.services;
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
@@ -30,6 +33,7 @@ public class PolarizedRoomService {
 	
 	private static final Logger logger = LogManager.getLogger(PolarizedRoomService.class.getName());
 	
+	@RolesAllowed("user")
 	@POST
 	@Path("/create")
 	@Consumes("application/json")
@@ -64,6 +68,7 @@ public class PolarizedRoomService {
 		return builder.build();
 	}
 	
+	@RolesAllowed("user")
 	@POST
 	@Path("/enter")
 	@Consumes("application/x-www-form-urlencoded")
@@ -77,7 +82,8 @@ public class PolarizedRoomService {
 		OpiningError error = new PolarizedRoomValidation().validateEntrance(password, idRoom, login);
 		ResponseBuilder builder;
 		
-		if(error==null){
+		if(error == null){
+			
 			PolarizedDebater debater = new PolarizedDebater();
 			PolarizedRoom room = new PolarizedRoom();
 			User user = new User();
@@ -96,7 +102,9 @@ public class PolarizedRoomService {
 			debater.setSide(null);
 			
 			builder = Response.status(Response.Status.OK).entity(debater);
+			
 		}else{
+			
 			builder = Response.status(Response.Status.CONFLICT).entity(error);
 			logger.warn("User entrance is failed with error code: " + error.getCode());
 		}
@@ -122,7 +130,7 @@ public class PolarizedRoomService {
 		return builder.build();
 	}
 	
-	@PermitAll
+	@RolesAllowed("user")
 	@GET
 	@Path("/list")
 	@Produces("application/json")
@@ -131,6 +139,23 @@ public class PolarizedRoomService {
 		PolarizedRoomDAO polarizedRoomDAO = new PolarizedRoomDAO();
 		
 		List<PolarizedRoom> polarizedRoom = polarizedRoomDAO.getAll();
+		
+		ResponseBuilder builder;
+		
+		builder = Response.status(Response.Status.OK).entity(polarizedRoom);
+		
+		return builder.build();
+	}
+	
+	@RolesAllowed("user")
+	@POST
+	@Path("/list/subject")
+	@Produces("application/json")
+	public Response listDebatesBySubject(@QueryParam("q") String subject){
+	
+		PolarizedRoomDAO polarizedRoomDAO = new PolarizedRoomDAO();
+		
+		List<PolarizedRoom> polarizedRoom = polarizedRoomDAO.getBySubject(subject);
 		
 		ResponseBuilder builder;
 		

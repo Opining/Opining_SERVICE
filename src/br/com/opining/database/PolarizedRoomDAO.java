@@ -57,5 +57,29 @@ public class PolarizedRoomDAO extends GenericDAO<PolarizedRoom> {
 
 		return polarizedRoom;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<PolarizedRoom> getBySubject(String subject) {
+
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		List<PolarizedRoom> polarizedRooms = null;
+
+		try {
+			
+			session.beginTransaction();
+			Query query = session.createQuery("from PolarizedRoom p where p.subject like :subject");
+			query.setParameter("subject", "%" + subject + "%");
+			polarizedRooms = query.list();
+			session.getTransaction().commit();
+
+		} catch (HibernateException hexp) {
+			session.getTransaction().rollback();
+
+		} finally {
+			session.close();
+		}
+
+		return polarizedRooms;
+	}
 
 }
