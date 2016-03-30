@@ -2,14 +2,12 @@ package br.com.opining.services;
 
 import java.util.List;
 
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
@@ -33,6 +31,17 @@ public class PolarizedRoomService {
 	
 	private static final Logger logger = LogManager.getLogger(PolarizedRoomService.class.getName());
 	
+	/**
+	 * This method create a new Debate (After check if that can be created) 
+	 * It's PolarizedRoom and insert it in the database.
+	 * If the received PolarizedRoom contains a existent login name this method return a 
+	 * response that contains a OpiningError, otherwise returns the created room with all informations.
+	 * 
+	 * @param newDebate
+	 * @return a response that can contains a PolarizedRoom or a OpiningError
+	 * 
+	 * @author Diego Takei and José Renan
+	 */	
 	@RolesAllowed("user")
 	@POST
 	@Path("/create")
@@ -68,6 +77,18 @@ public class PolarizedRoomService {
 		return builder.build();
 	}
 	
+	/**
+	 * This method allows a user entering a room (After check if that exists)
+	 * After validatiion, the method create a Debater that will be inserted into a room
+	 * 
+	 * @param password
+	 * @param idRoom
+	 * @param login
+	 * 
+	 * @return a response that can contains a debater or a OpiningError
+	 * 
+	 * @author Diego Takei and José Renan
+	 */	
 	@RolesAllowed("user")
 	@POST
 	@Path("/enter")
@@ -112,6 +133,16 @@ public class PolarizedRoomService {
 		return builder.build();
 	}
 	
+	/**
+	 * This method allows a user leaving a room
+	 * Invalidating the debater
+	 * 
+	 * @param debater
+	 * 
+	 * @return a response that can contains a debater or null
+	 * 
+	 * @author Diego Takei and José Renan
+	 */	
 	@POST
 	@Path("/leave")
 	@Consumes("application/json")
@@ -130,6 +161,13 @@ public class PolarizedRoomService {
 		return builder.build();
 	}
 	
+	/**
+	 * This method list the existing debates
+	 * 
+	 * @return a response that can contains a polarizedRoom list or null
+	 * 
+	 * @author José Renan
+	 */	
 	@RolesAllowed("user")
 	@GET
 	@Path("/list")
@@ -147,6 +185,13 @@ public class PolarizedRoomService {
 		return builder.build();
 	}
 	
+	/**
+	 * This method list the existing debates by Subject
+	 * 
+	 * @return a response that can contains a polarizedRoom list or null
+	 * 
+	 * @author José Renan
+	 */	
 	@RolesAllowed("user")
 	@POST
 	@Path("/list/subject")
