@@ -9,7 +9,7 @@ import br.com.opining.util.HibernateUtil;
 
 public abstract class GenericDAO<T> {
 	
-	public int insert(T entity) {
+	public void insert(T entity) {
 		
 		Session session = HibernateUtil.getSessionFactory().openSession();
 
@@ -23,7 +23,6 @@ public abstract class GenericDAO<T> {
 		} finally {
 			session.close();
 		}
-		return 0;
 	}
 	
 	public void update(T entity) {

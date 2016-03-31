@@ -95,7 +95,7 @@ public class UserDAO extends GenericDAO<User>{
 		return validUsers;
 	}
 	
-	public User getValidUser(Integer id){
+	public User getValidUserById(Integer id){
 		
 		 Session session = HibernateUtil.getSessionFactory().openSession();
 		 session.beginTransaction();
@@ -110,21 +110,5 @@ public class UserDAO extends GenericDAO<User>{
 		 session.close();
 		
 		return user;
-	}
-	
-	public User getByToken (String token){
-		 Session session = HibernateUtil.getSessionFactory().openSession();
-		 session.beginTransaction();
-		
-		 Query query = session.createQuery("from User where token = :token");
-		 query.setParameter("token", token);
-		 query.setMaxResults(1);
-		 
-		 User user = (User) query.uniqueResult();
-		
-		 session.getTransaction().commit();
-		 session.close();
-		
-		 return user;
 	}
 }
