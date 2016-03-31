@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>Opining_SERVICE</groupId>
+	<groupId>br.com.opining</groupId>
 	<artifactId>Opining_SERVICE</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.1-aplha</version>
 	<packaging>war</packaging>
 
 	<build>
@@ -38,7 +38,14 @@
 	</build>
 
 	<dependencies>
-
+		
+		<!-- Opining Model -->
+		<dependency>
+			<groupId>br.com.opining</groupId>
+			<artifactId>Opining_LIB</artifactId>
+			<version>0.0.1-alpha</version>
+		</dependency>
+		
 		<!-- JTA -->
 		<dependency>
 			<groupId>javax.transaction</groupId>
