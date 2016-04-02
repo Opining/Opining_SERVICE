@@ -19,7 +19,6 @@ public abstract class GenericDAO<T> {
 			session.getTransaction().commit();
 		} catch (HibernateException hexp) {
 			session.getTransaction().rollback();
-			hexp.printStackTrace();
 		} finally {
 			session.close();
 		}
